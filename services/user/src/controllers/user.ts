@@ -25,7 +25,7 @@ export const loginUser = TryCatch(async (req, res) => {
     `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
   );
 
-  const { email, name, picture } = userRes.data;
+  const { email, name, picture } = userRes.data as { email: string; name: string; picture: string };
 
   let user = await User.findOne({ email });
 
