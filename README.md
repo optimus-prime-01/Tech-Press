@@ -15,6 +15,9 @@ flowchart TD
   DBU["User DB (MongoDB)"]
   DBB["Blog DB (MongoDB)"]
   DBA["Author DB (MongoDB)"]
+  REDIS["Redis (Cache/Session)"]
+  MQ["RabbitMQ (Message Broker)"]
+  CLOUD["Cloudinary (Image Storage)"]
 
   FE1 -- "REST API" --> US1
   FE1 -- "REST API" --> BS1
@@ -26,6 +29,18 @@ flowchart TD
 
   US1 <--> BS1
   BS1 <--> AS1
+
+  US1 -- "Cache/Session" --- REDIS
+  BS1 -- "Cache/Session" --- REDIS
+  AS1 -- "Cache/Session" --- REDIS
+
+  US1 -- "Image Uploads" --- CLOUD
+  BS1 -- "Image Uploads" --- CLOUD
+  AS1 -- "Image Uploads" --- CLOUD
+
+  US1 -- "Publish/Subscribe" --- MQ
+  BS1 -- "Publish/Subscribe" --- MQ
+  AS1 -- "Publish/Subscribe" --- MQ
 ```
 
 ---
@@ -162,6 +177,28 @@ pnpm dev
 - [MongoDB](https://www.mongodb.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Cloudinary](https://cloudinary.com/)
+
+---
+
+## 🖼️ UI Screenshots
+
+Below are some screenshots of the Tech-Press Blog Platform UI:
+
+<!-- Example: Place your screenshots in the /public or /assets directory and reference them here. -->
+
+### Home Page
+![Home Page](./public/screenshots/homepage.png)
+
+### Blog List
+![Blog List](./public/screenshots/bloglist.png)
+
+### Blog Detail
+![Blog Detail](./public/screenshots/blogdetail.png)
+
+### Profile Page
+![Profile Page](./public/screenshots/profile.png)
+
+> **Tip:** Add your own screenshots to the `public/screenshots/` folder and update the paths above as needed.
 
 ---
 
