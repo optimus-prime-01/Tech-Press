@@ -1,0 +1,75 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:5
+        ports: [27017:27017]
+      redis:
+        image: redis
+        ports: [6379:6379]
+      rabbitmq:
+        image: rabbitmq:3-management
+        ports: [5672:5672, 15672:15672]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install root dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install
+
+      - name: Install and build User Service
+        run: |
+          cd tech-press-blog/services/user1
+          pnpm install
+          pnpm build || true
+
+      - name: Install and build Blog Service
+        run: |
+          cd tech-press-blog/services/blog
+          pnpm install
+          pnpm build || true
+
+      - name: Install and build Author Service
+        run: |
+          cd tech-press-blog/services/author
+          pnpm install
+          pnpm build || true
+
+      - name: Install and build Frontend
+        run: |
+          cd tech-press-blog
+          pnpm install
+          pnpm build
+
+      # Add test steps here if you have tests
+      # - name: Run tests
+      #   run: pnpm test
+
+      # Optionally, build Docker images
+      # - name: Build Docker images
+      #   run: |
+      #     docker build -t user-service ./tech-press-blog/services/user1
+      #     docker build -t blog-service ./tech-press-blog/services/blog
+      #     docker build -t author-service ./tech-press-blog/services/author
+      #     docker build -t frontend ./tech-press-blog
+
+      # Optionally, deploy to AWS, DockerHub, etc.
+      # See: https://docs.github.com/en/actions/deployment 
