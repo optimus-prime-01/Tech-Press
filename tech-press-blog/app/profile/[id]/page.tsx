@@ -35,19 +35,18 @@ interface UserBlog {
 }
 
 export default function ProfilePage() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
-
   const params = useParams()
   const { user } = useAuth()
   const { toast } = useToast()
+  const [mounted, setMounted] = useState(false);
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [blogs, setBlogs] = useState<UserBlog[]>([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(false)
   const [editName, setEditName] = useState("")
   const [editBio, setEditBio] = useState("")
+
+  useEffect(() => setMounted(true), []);
 
   const isOwnProfile = user?.id === params.id
 
@@ -185,6 +184,8 @@ export default function ProfilePage() {
       })
     }
   }
+
+  if (!mounted) return null;
 
   if (loading) {
     return (
