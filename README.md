@@ -1,6 +1,81 @@
+
 # Tech-Press Blog Platform
 
-A modern, full-stack, microservices-based tech blogging platform built with **Next.js (React)** for the frontend and **Node.js/Express** microservices for the backend. Features include authentication, blog CRUD, comments, profile management, and more.
+A modern, full-stack, microservices-based tech blogging platform built with **Next.js (React)** for the frontend and **Node.js/Express** microservices for the backend. Features include authentication, blog CRUD, comments, profile management, and more. The system uses both **SQL** and **MongoDB** databases for data storage, depending on the service and use case. 
+
+This project also leverages **Cloudinary** for scalable image storage and delivery, **Redis** for fast caching and session management, and **RabbitMQ** for robust asynchronous message brokering between services.
+
+---
+# 🚀 Tech Stack
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=fff" alt="Next.js"/>
+  <img src="https://img.shields.io/badge/React-20232a?logo=react&logoColor=61dafb" alt="React"/>
+  <img src="https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=fff" alt="Node.js"/>
+  <img src="https://img.shields.io/badge/Express-000?logo=express&logoColor=fff" alt="Express"/>
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38bdf8?logo=tailwindcss&logoColor=fff" alt="Tailwind CSS"/>
+  <img src="https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=fff" alt="MongoDB"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=fff" alt="PostgreSQL"/>
+  <img src="https://img.shields.io/badge/Redis-DC382D?logo=redis&logoColor=fff" alt="Redis"/>
+  <img src="https://img.shields.io/badge/RabbitMQ-FF6600?logo=rabbitmq&logoColor=fff" alt="RabbitMQ"/>
+  <img src="https://img.shields.io/badge/Cloudinary-3448C5?logo=cloudinary&logoColor=fff" alt="Cloudinary"/>
+  <img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff" alt="Docker"/>
+  <img src="https://img.shields.io/badge/CI%2FCD-222?logo=githubactions&logoColor=blue" alt="CI/CD"/>
+  <img src="https://img.shields.io/badge/AWS-232F3E?logo=amazonaws&logoColor=ff9900" alt="AWS"/>
+</p>
+
+
+## 📝 .env Structure
+
+Below are example `.env` files for each service and the frontend. Copy these into the appropriate folders and fill in your own values.
+
+### Frontend (`tech-press-blog/.env`)
+```
+NEXT_PUBLIC_API_URL=http://localhost:5002/api/v1
+NEXT_PUBLIC_USER_API_URL=http://localhost:5001/api/v1/user1
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud_name
+```
+
+### User Service (`services/user1/.env`)
+```
+MONGO_URI=your_mongodb_uri
+SQL_URI=your_sql_uri
+JWT_SEC=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+REDIS_URL=redis://localhost:6379
+RABBITMQ_URL=amqp://localhost
+PORT=5001
+```
+
+### Blog Service (`services/blog/.env`)
+```
+MONGO_URI=your_mongodb_uri
+SQL_URI=your_sql_uri
+JWT_SEC=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+REDIS_URL=redis://localhost:6379
+RABBITMQ_URL=amqp://localhost
+PORT=5002
+```
+
+### Author Service (`services/author/.env`)
+```
+MONGO_URI=your_mongodb_uri
+SQL_URI=your_sql_uri
+JWT_SEC=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+REDIS_URL=redis://localhost:6379
+RABBITMQ_URL=amqp://localhost
+PORT=5003
+```
+
+> **Tip:** Never commit your `.env` files to version control. They are already included in `.gitignore`.
 
 ---
 
@@ -12,9 +87,9 @@ flowchart TD
   US1["User Service (Express)"]
   BS1["Blog Service (Express)"]
   AS1["Author Service (Express)"]
-  DBU["User DB (MongoDB)"]
-  DBB["Blog DB (MongoDB)"]
-  DBA["Author DB (MongoDB)"]
+  DBU["User DB (MongoDB/SQL)"]
+  DBB["Blog DB (MongoDB/SQL)"]
+  DBA["Author DB (MongoDB/SQL)"]
   REDIS["Redis (Cache/Session)"]
   MQ["RabbitMQ (Message Broker)"]
   CLOUD["Cloudinary (Image Storage)"]
@@ -69,9 +144,9 @@ flowchart TD
   /public      # Static assets
   /styles      # Global and component styles
   /services
-    /user1     # User microservice (Express, MongoDB)
-    /blog      # Blog microservice (Express, MongoDB)
-    /author    # Author microservice (Express, MongoDB)
+    /user1     # User microservice (Express, MongoDB/SQL)
+    /blog      # Blog microservice (Express, MongoDB/SQL)
+    /author    # Author microservice (Express, MongoDB/SQL)
 ```
 
 ---
@@ -115,16 +190,27 @@ CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 ```
 
-### 4. Run the backend services
+### 4. Start the Backend Services
+
+Open three separate terminals (one for each service):
 
 ```bash
-# In separate terminals
-cd services/user1 && pnpm dev
-cd services/blog && pnpm dev
-cd services/author && pnpm dev
+# Terminal 1: User Service
+cd services/user1
+pnpm dev
+
+# Terminal 2: Blog Service
+cd services/blog
+pnpm dev
+
+# Terminal 3: Author Service
+cd services/author
+pnpm dev
 ```
 
-### 5. Run the frontend
+### 5. Start the Frontend
+
+Open a new terminal and run:
 
 ```bash
 cd tech-press-blog
@@ -141,19 +227,6 @@ pnpm dev
 
 ---
 
-## 🧩 API Endpoints
-
-- **User Service:** `/api/v1/user1`
-  - `POST /register` - Register user
-  - `POST /login` - Login user
-  - `GET /:id` - Get user profile
-- **Blog Service:** `/api/v1/blog`
-  - `GET /all` - Get all blogs
-  - `POST /new` - Create blog
-  - etc.
-
----
-
 ## 📝 Contributing
 
 1. Fork the repo
@@ -164,21 +237,6 @@ pnpm dev
 
 ---
 
-## 📄 License
-
-[MIT](LICENSE)
-
----
-
-## 🙏 Acknowledgements
-
-- [Next.js](https://nextjs.org/)
-- [Express](https://expressjs.com/)
-- [MongoDB](https://www.mongodb.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Cloudinary](https://cloudinary.com/)
-
----
 
 ## 🖼️ UI Screenshots
 
@@ -186,20 +244,9 @@ Below are some screenshots of the Tech-Press Blog Platform UI:
 
 <!-- Example: Place your screenshots in the /public or /assets directory and reference them here. -->
 
-### Home Page
-![Home Page](./public/screenshots/homepage.png)
 
-### Blog List
-![Blog List](./public/screenshots/bloglist.png)
+<img width="1452" height="824" alt="Screenshot 2025-07-21 at 2 22 55 AM" src="https://github.com/user-attachments/assets/887cb57b-e1dd-4099-82d0-e1da82f90c82" />
+<img width="2940" height="1662" alt="screencapture-localhost-3001-profile-687d47860d211504630eebe1-2025-07-21-02_27_56" src="https://github.com/user-attachments/assets/9c567363-3ae9-4136-947e-24aef6451eb1" />
+<img width="2940" height="1662" alt="screencapture-localhost-3001-dashboard-2025-07-21-02_28_34" src="https://github.com/user-attachments/assets/aec5e359-4e89-44be-997e-8b5e4d428279" />
 
-### Blog Detail
-![Blog Detail](./public/screenshots/blogdetail.png)
 
-### Profile Page
-![Profile Page](./public/screenshots/profile.png)
-
-> **Tip:** Add your own screenshots to the `public/screenshots/` folder and update the paths above as needed.
-
----
-
-**Feel free to copy and adjust this README for your GitHub repository! If you want the diagram or instructions tweaked, just ask.** 
