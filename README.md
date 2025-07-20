@@ -24,6 +24,62 @@ This project also leverages **Cloudinary** for scalable image storage and delive
   <img src="https://img.shields.io/badge/AWS-232F3E?logo=amazonaws&logoColor=ff9900" alt="AWS"/>
 </p>
 
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart TD
+  FE1["Frontend (Next.js)"]
+  US1["User Service (Express)"]
+  BS1["Blog Service (Express)"]
+  AS1["Author Service (Express)"]
+  DBU["User DB (MongoDB/SQL)"]
+  DBB["Blog DB (MongoDB/SQL)"]
+  DBA["Author DB (MongoDB/SQL)"]
+  REDIS["Redis (Cache/Session)"]
+  MQ["RabbitMQ (Message Broker)"]
+  CLOUD["Cloudinary (Image Storage)"]
+
+  FE1 -- "REST API" --> US1
+  FE1 -- "REST API" --> BS1
+  FE1 -- "REST API" --> AS1
+
+  US1 -- "User CRUD" --> DBU
+  BS1 -- "Blog CRUD" --> DBB
+  AS1 -- "Author CRUD" --> DBA
+
+  US1 <--> BS1
+  BS1 <--> AS1
+
+  US1 -- "Cache/Session" --- REDIS
+  BS1 -- "Cache/Session" --- REDIS
+  AS1 -- "Cache/Session" --- REDIS
+
+  US1 -- "Image Uploads" --- CLOUD
+  BS1 -- "Image Uploads" --- CLOUD
+  AS1 -- "Image Uploads" --- CLOUD
+
+  US1 -- "Publish/Subscribe" --- MQ
+  BS1 -- "Publish/Subscribe" --- MQ
+  AS1 -- "Publish/Subscribe" --- MQ
+```
+
+---
+
+
+## 🖼️ UI Screenshots
+
+Below are some screenshots of the Tech-Press Blog Platform UI:
+
+<!-- Example: Place your screenshots in the /public or /assets directory and reference them here. -->
+
+
+<img width="1452" height="824" alt="Screenshot 2025-07-21 at 2 22 55 AM" src="https://github.com/user-attachments/assets/887cb57b-e1dd-4099-82d0-e1da82f90c82" />
+<img width="2940" height="1662" alt="screencapture-localhost-3001-profile-687d47860d211504630eebe1-2025-07-21-02_27_56" src="https://github.com/user-attachments/assets/9c567363-3ae9-4136-947e-24aef6451eb1" />
+<img width="2940" height="1662" alt="screencapture-localhost-3001-dashboard-2025-07-21-02_28_34" src="https://github.com/user-attachments/assets/aec5e359-4e89-44be-997e-8b5e4d428279" />
+
+---
 
 ## 📝 .env Structure
 
@@ -76,47 +132,6 @@ PORT=5003
 ```
 
 > **Tip:** Never commit your `.env` files to version control. They are already included in `.gitignore`.
-
----
-
-## 🏗️ Architecture
-
-```mermaid
-flowchart TD
-  FE1["Frontend (Next.js)"]
-  US1["User Service (Express)"]
-  BS1["Blog Service (Express)"]
-  AS1["Author Service (Express)"]
-  DBU["User DB (MongoDB/SQL)"]
-  DBB["Blog DB (MongoDB/SQL)"]
-  DBA["Author DB (MongoDB/SQL)"]
-  REDIS["Redis (Cache/Session)"]
-  MQ["RabbitMQ (Message Broker)"]
-  CLOUD["Cloudinary (Image Storage)"]
-
-  FE1 -- "REST API" --> US1
-  FE1 -- "REST API" --> BS1
-  FE1 -- "REST API" --> AS1
-
-  US1 -- "User CRUD" --> DBU
-  BS1 -- "Blog CRUD" --> DBB
-  AS1 -- "Author CRUD" --> DBA
-
-  US1 <--> BS1
-  BS1 <--> AS1
-
-  US1 -- "Cache/Session" --- REDIS
-  BS1 -- "Cache/Session" --- REDIS
-  AS1 -- "Cache/Session" --- REDIS
-
-  US1 -- "Image Uploads" --- CLOUD
-  BS1 -- "Image Uploads" --- CLOUD
-  AS1 -- "Image Uploads" --- CLOUD
-
-  US1 -- "Publish/Subscribe" --- MQ
-  BS1 -- "Publish/Subscribe" --- MQ
-  AS1 -- "Publish/Subscribe" --- MQ
-```
 
 ---
 
@@ -235,18 +250,5 @@ pnpm dev
 4. Push to the branch (`git push origin feature/YourFeature`)
 5. Open a pull request
 
----
-
-
-## 🖼️ UI Screenshots
-
-Below are some screenshots of the Tech-Press Blog Platform UI:
-
-<!-- Example: Place your screenshots in the /public or /assets directory and reference them here. -->
-
-
-<img width="1452" height="824" alt="Screenshot 2025-07-21 at 2 22 55 AM" src="https://github.com/user-attachments/assets/887cb57b-e1dd-4099-82d0-e1da82f90c82" />
-<img width="2940" height="1662" alt="screencapture-localhost-3001-profile-687d47860d211504630eebe1-2025-07-21-02_27_56" src="https://github.com/user-attachments/assets/9c567363-3ae9-4136-947e-24aef6451eb1" />
-<img width="2940" height="1662" alt="screencapture-localhost-3001-dashboard-2025-07-21-02_28_34" src="https://github.com/user-attachments/assets/aec5e359-4e89-44be-997e-8b5e4d428279" />
 
 
